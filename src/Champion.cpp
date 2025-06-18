@@ -3,8 +3,8 @@
 #include <iomanip>
 using namespace std;
 
-Champion::Champion(string name, int hp, int attack, int spAttack, int reqCharge, string specialMoveName)
-    : specialMoveName(specialMoveName),
+Champion::Champion(string name, int hp, int attack, int spAttack, int reqCharge, string specialMoveName):
+specialMoveName(specialMoveName),
 name(name), hp(hp), attack(attack), spAttack(spAttack),
 defending(false), reqCharge(reqCharge), spCharge(0) {}
 
@@ -47,14 +47,14 @@ void Champion::display() const {
          << " | ✨ SP: " << setw(6) << spAttack
          << " | 🔋 [" << bar << "] "
          << spCharge << "/" << reqCharge
-         << " | 🛡️ DEF: " << (defending ? "Yes" : " No")
+        //  << " | 🛡️ DEF: " << (defending ? "Yes" : " No")
          << " |\n";
 }
 
 
 
 void Champion::basicAttack(Champion& enemy){
-    cout << name << " attacks and deals " << attack << " damage to " << enemy.getName() << "!\n";
+    cout << name << " attacks " << enemy.getName() << "!\n";
     enemy.takeDamage(attack);
 }
 

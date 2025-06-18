@@ -17,64 +17,94 @@ Champion *createEnemy()
         return new Tank("Enemy Tank");
 }
 
+Champion *setupPlayer();
+bool playBattle(Champion *player, int &enemiesDefeated);
+bool askReplay();
+
 int main()
 {
-    SetConsoleOutputCP(CP_UTF8); // Set console to UTF-8 for proper character display
-    system("cls"); // Clear console screen
-    srand(time(0)); // seed random
+    SetConsoleOutputCP(CP_UTF8);
+    srand(time(0));
 
-    cout << "Enter you name..." << endl;
+    while (true)
+    {
+        Champion *player = setupPlayer();
+        int enemiesDefeated = 0;
+
+        bool stillAlive = true;
+        while (stillAlive)
+        {
+            stillAlive = playBattle(player, enemiesDefeated);
+            if (!stillAlive)
+                break;
+
+            cout << "\n🎉 You defeated the enemy!\n";
+            cout << "\nGo to next stage? (you gain 40HP)\n1. Yes\n2. No\n> ";
+            int cont;
+            cin >> cont;
+            if (cont != 1)
+                break;
+            player->takeDamage(-40); // Heal
+        }
+
+        delete player;
+
+        if (!askReplay())
+            break;
+    }
+
+    cout << "\n👋 Thanks for playing!\n";
+    return 0;
+}
+Champion *setupPlayer()
+{
+    system("cls");
+    cout << "Enter your name...\n";
     string player_name;
     cin >> player_name;
 
     cout << "Choose your champion:\n1. Warrior\n2. Mage\n3. Tank\n-> ";
     int choice;
     cin >> choice;
+    system("cls");
 
-    Champion *player;
     switch (choice)
     {
     case 1:
-        player = new Warrior(player_name);
-        break;
+        return new Warrior(player_name);
     case 2:
-        player = new Mage(player_name);
-        break;
+        return new Mage(player_name);
     case 3:
-        player = new Tank(player_name);
-        break;
+        return new Tank(player_name);
     default:
         cout << "Invalid choice! Defaulting to Warrior.\n";
-        player = new Warrior(player_name);
-        break;
+        return new Warrior(player_name);
     }
-
+}
+bool playBattle(Champion *player, int &enemiesDefeated)
+{
     Champion *enemy = createEnemy();
-    system("cls");
     cout << "\n💥 Battle Start! 💥\n";
 
     while (player->isAlive() && enemy->isAlive())
     {
+        cout << "\n🏆 Enemies Defeated: " << enemiesDefeated << "\n";
         cout << "\n-- Your Turn --\n";
         player->display();
         enemy->display();
 
         int playerMove, enemyMove;
-
         cout << "\nChoose action:\n1. Basic Attack\n2. Special Move\n3. Defend\n> ";
         cin >> playerMove;
 
-        enemyMove = (rand() % 3) + 1;
-
+        enemyMove = rand() % 3 + 1;
         system("cls");
 
-        // Apply Defend state immediately
         if (playerMove == 3)
             player->defend();
         if (enemyMove == 3)
             enemy->defend();
 
-        // Player attacks (if not defending)
         if (playerMove == 1)
             player->basicAttack(*enemy);
         else if (playerMove == 2)
@@ -87,28 +117,39 @@ int main()
         if (enemyMove == 1)
             enemy->basicAttack(*player);
         else if (enemyMove == 2)
+        {
+            cout << enemy->getName() << " is using their special move!\n";
             enemy->specialMove(*player);
-        else if (enemyMove == 3)
+        }
+        else
+        {
             cout << enemy->getName() << " was defending!\n";
+        }
 
-        if (!player->isAlive())
-            break;
-
-        // Reset defense for next round
         player->resetDefend();
         enemy->resetDefend();
 
-        // Charge special moves
         player->increaseCharge();
         enemy->increaseCharge();
     }
 
-    if (player->isAlive())
-        cout << "\n🎉 You Win!\n";
+    bool alive = player->isAlive();
+    if (!alive)
+    {
+        cout << "\n💀 You were defeated after beating " << enemiesDefeated << " enemies.\n";
+    }
     else
-        cout << "\n💀 You Lose...\n";
+    {
+        enemiesDefeated++;
+    }
 
-    delete player;
     delete enemy;
-    return 0;
+    return alive;
+}
+bool askReplay()
+{
+    cout << "\n🔁 Do you want to play again?\n1. Yes\n2. No\n> ";
+    int replay;
+    cin >> replay;
+    return replay == 1;
 }
