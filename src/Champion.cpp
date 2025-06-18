@@ -13,6 +13,7 @@ void Champion::takeDamage(int dmg) {
         cout << name << " is defending! Damage is halved.\n";
         dmg /= 2;
     }
+    cout << name << " took a hit of " << dmg << " HP!\n";
     hp -= dmg;
     if (hp < 0) hp = 0;
 }
