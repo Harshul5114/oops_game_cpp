@@ -6,15 +6,28 @@
 #include <windows.h>
 using namespace std;
 
-Champion *createEnemy()
-{
+Champion* createEnemy() {
     int r = rand() % 3;
-    if (r == 0)
-        return new Warrior("Enemy Warrior");
-    else if (r == 1)
-        return new Mage("Enemy Mage");
-    else
-        return new Tank("Enemy Tank");
+    Champion* enemy = nullptr;
+    switch (r) {
+        case 0:
+            cout << "An enemy Warrior appears: Dreadblade!\n";
+            enemy = new Warrior("Dreadblade");
+            break;
+        case 1:
+            cout << "An enemy Mage appears: Maltheron!\n";
+            enemy = new Mage("Maltheron");
+            break;
+        case 2:
+            cout << "An enemy Tank appears: Gor'Mar!\n";
+            enemy = new Tank("Gor'Mar");
+            break;
+        default:
+            cout << "An unknown enemy appears: Nameless Horror!\n";
+            enemy = new Warrior("Nameless Horror");
+            break;
+    }
+    return enemy;
 }
 
 Champion *setupPlayer();
@@ -83,8 +96,9 @@ Champion *setupPlayer()
 }
 bool playBattle(Champion *player, int &enemiesDefeated)
 {
-    Champion *enemy = createEnemy();
+    system("cls");
     cout << "\n💥 Battle Start! 💥\n";
+    Champion *enemy = createEnemy();
 
     while (player->isAlive() && enemy->isAlive())
     {
@@ -94,7 +108,7 @@ bool playBattle(Champion *player, int &enemiesDefeated)
         enemy->display();
 
         int playerMove, enemyMove;
-        cout << "\nChoose action:\n1. Basic Attack\n2. Special Move\n3. Defend\n> ";
+        cout << "\nChoose action:\n1. Basic Attack\n2. Special Move(" << player->getSpecialMoveName() << ") \n3. Defend\n> ";
         cin >> playerMove;
 
         enemyMove = rand() % 3 + 1;
