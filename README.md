@@ -23,14 +23,14 @@ You take control of a champion, face off against randomized enemies, and survive
 2. Open terminal and navigate to the project folder
 3. Compile using g++:
 
-   ```bash
-   g++ src/*.cpp -o rpg_game
-   ```
+    ```bash
+    g++ src/*.cpp -o build/game.exe
+    ```
 4. Run the game:
 
-   ```bash
-   ./rpg_game   # or rpg_game.exe on Windows
-   ```
+    ```bash
+    ./build/game.exe
+    ```
 
 > Make sure your terminal supports UTF-8 if you want emoji rendering.
 
@@ -84,3 +84,4 @@ A hands-on C++ learner exploring game systems and terminal UI.
 ## 📜 License
 
 This project is released under the MIT License. See `LICENSE` for details.
+
