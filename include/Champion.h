@@ -1,4 +1,5 @@
 #pragma once
+#include "../include/Weapon.h"
 #include <string>
 using namespace std;
 
@@ -10,12 +11,21 @@ protected:
     int spAttack; 
     int reqCharge;
     string specialMoveName;
+    Weapon* weapon;
 
     int spCharge;
     bool defending;
 
 public:
-    Champion(string name, int hp, int attack, int spAttack, int reqCharge, string specialMoveName = "Special Move");
+    Champion(
+    string name,
+    int hp, 
+    int attack, 
+    int spAttack, 
+    int reqCharge, 
+    string specialMoveName = "Special Move",
+    Weapon* weapon = nullptr
+    );
 
     
     void takeDamage(int amount);
@@ -28,7 +38,9 @@ public:
     void resetDefend();
     void increaseCharge();
 
-
+    void equipWeapon(Weapon* w);
+    int getEffectiveAttack() const;
+    int getEffectiveSpAttack() const;
 
     int getHP() const;
     string getName() const;

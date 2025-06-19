@@ -3,15 +3,23 @@
 #include <iomanip>
 using namespace std;
 
-Champion::Champion(string name, int hp, int attack, int spAttack, int reqCharge, string specialMoveName):
+Champion::Champion(
+    string name, 
+    int hp, 
+    int attack, 
+    int spAttack, 
+    int reqCharge, 
+    string specialMoveName,
+    Weapon* weapon
+):
 specialMoveName(specialMoveName),
 name(name), hp(hp), attack(attack), spAttack(spAttack),
-defending(false), reqCharge(reqCharge), spCharge(0) {}
+defending(false), reqCharge(reqCharge), spCharge(0), weapon(weapon) {}
 
 void Champion::takeDamage(int dmg) {
     if (defending) {
-        cout << name << " is defending! Damage is halved.\n";
-        dmg /= 2;
+        cout << name << " is defending! Damage is reduced.\n";
+        dmg /= 5;
     }
     cout << name << " took a hit of " << dmg << " HP!\n";
     hp -= dmg;
@@ -44,9 +52,10 @@ void Champion::display() const {
 
     cout << "| 🧍 " << setw(12) << left << name
          << " | ❤️ HP: " << setw(4) << hp
-         << " | 🗡️ ATK: " << setw(4) << attack
-         << " | ✨ SP: " << setw(6) << spAttack
-         << " | 🔋 [" << bar << "] "
+         << " | Weapon: " << (weapon ? weapon->getName() : "None")
+         << " | 🗡️ ATK: " << setw(4) << getEffectiveAttack()
+         << " | ✨ SP: " << setw(6) << getEffectiveSpAttack()
+         << " | 🔋 CHRG:[" << bar << "] "
          << spCharge << "/" << reqCharge
         //  << " | 🛡️ DEF: " << (defending ? "Yes" : " No")
          << " |\n";
@@ -56,7 +65,7 @@ void Champion::display() const {
 
 void Champion::basicAttack(Champion& enemy){
     cout << name << " attacks " << enemy.getName() << "!\n";
-    enemy.takeDamage(attack);
+    enemy.takeDamage(getEffectiveAttack());
 }
 
 // void Champion::specialMove(Champion& enemy) {
@@ -75,4 +84,21 @@ int Champion::getHP() const{
 
 string Champion::getName() const{
     return name;
+}
+
+void Champion::equipWeapon(Weapon* w) {
+    weapon = w;
+}
+
+int Champion::getEffectiveAttack() const {
+    int effattack = attack + (weapon ? weapon->getAtkBoost() : 0);
+    if (weapon->is_crit()){
+        cout << "🩸 CRITICAL HIT! double damageee.." << endl;
+        effattack *= 2;
+    }
+    return effattack;
+}
+
+int Champion::getEffectiveSpAttack() const {
+    return spAttack + (weapon ? weapon->getSpBoost() : 0);
 }
