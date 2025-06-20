@@ -109,3 +109,7 @@ int Champion::getEffectiveAttack() const {
 int Champion::getEffectiveSpAttack() const {
     return spAttack + (weapon ? weapon->getSpBoost() : 0);
 }
+
+Weapon* Champion::getWeapon() const {
+    return weapon;
+}

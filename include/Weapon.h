@@ -19,6 +19,8 @@ public:
     int getSpBoost() const;
     float getCritChance() const; // Getter for crit chance
     bool is_crit() const;
+    void boostatk(int atk);
+    void boostsp(int sp);
 };
 
 #endif

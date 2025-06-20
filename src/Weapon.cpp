@@ -27,3 +27,11 @@ bool Weapon::is_crit() const {
 
     return false;
 }
+
+void Weapon::boostatk(int atk) {
+    atkBoost += atk;
+}
+
+void Weapon::boostsp(int sp) {
+    spBoost += sp;
+}

@@ -43,6 +43,7 @@ public:
     void equipWeapon(Weapon* w);
     int getEffectiveAttack() const;
     int getEffectiveSpAttack() const;
+    Weapon* getWeapon() const;
 
     int getHP() const;
     string getName() const;
