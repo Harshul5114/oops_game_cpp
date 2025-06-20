@@ -19,4 +19,5 @@ class Tank : public Champion {
 public:
     Tank(string name);
     void specialMove(Champion& enemy) override;
+    void takeDamage(int dmg) override;
 };

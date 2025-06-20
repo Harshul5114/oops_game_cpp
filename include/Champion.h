@@ -7,6 +7,7 @@ class Champion {
 protected:
     string name;
     int hp;
+    int maxhp;
     int attack;
     int spAttack; 
     int reqCharge;
@@ -19,7 +20,7 @@ protected:
 public:
     Champion(
     string name,
-    int hp, 
+    int maxhp,
     int attack, 
     int spAttack, 
     int reqCharge, 
@@ -28,7 +29,8 @@ public:
     );
 
     
-    void takeDamage(int amount);
+    virtual void takeDamage(int amount);
+    void heal(int amount);
     bool isAlive() const;
     void display() const;
     

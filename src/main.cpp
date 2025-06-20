@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <windows.h>
+#include <limits>
 using namespace std;
 
 Champion* createEnemy() {
@@ -57,7 +58,7 @@ int main()
             cin >> cont;
             if (cont != 1)
                 break;
-            player->takeDamage(-40); // Heal
+            player->heal(40); // Heal
         }
 
         delete player;
@@ -76,7 +77,7 @@ Champion *setupPlayer()
     string player_name;
     cin >> player_name;
 
-    cout << "Choose your champion:\n1. Warrior\n2. Mage\n3. Tank\n-> ";
+    cout << "Choose your champion:\n1. Warrior (Balanced)\n2. Mage (50% chance of lifesteal when using special)\n3. Tank (greatly reduces damage on successful defend)\n-> ";
     int choice;
     cin >> choice;
     system("cls");
@@ -107,11 +108,20 @@ bool playBattle(Champion *player, int &enemiesDefeated)
         player->display();
         enemy->display();
 
-        int playerMove, enemyMove;
-        cout << "\nChoose action:\n1. Basic Attack\n2. Special Move(" << player->getSpecialMoveName() << ") \n3. Defend\n> ";
-        cin >> playerMove;
+        int playerMove;
+        while (true) {
+            cout << "\nChoose action:\n1. Basic Attack\n2. Special Move(" << player->getSpecialMoveName() << ") \n3. Defend\n> ";
+            cin >> playerMove;
+            if (cin.fail() || playerMove < 1 || playerMove > 3) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input! Please enter 1, 2, or 3.\n";
+            } else {
+                break;
+            }
+        }
 
-        enemyMove = rand() % 3 + 1;
+        int enemyMove = rand() % 3 + 1;
         system("cls");
 
         if (playerMove == 3)
