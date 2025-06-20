@@ -5,19 +5,19 @@
 
 class Warrior : public Champion {
 public:
-    Warrior(string name);
+    Warrior(string name, float scale);
     void specialMove(Champion& enemy) override;
 };
 
 class Mage : public Champion {
 public:
-    Mage(string name);
+    Mage(string name, float scale); // ✅ must match definition
     void specialMove(Champion& enemy) override;
 };
 
 class Tank : public Champion {
 public:
-    Tank(string name);
+    Tank(string name, float scale);
     void specialMove(Champion& enemy) override;
     void takeDamage(int dmg) override;
 };

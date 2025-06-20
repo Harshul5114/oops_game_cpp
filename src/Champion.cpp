@@ -113,3 +113,7 @@ int Champion::getEffectiveSpAttack() const {
 Weapon* Champion::getWeapon() const {
     return weapon;
 }
+
+void Champion::increaseMaxHP(int amount) {
+    maxhp += amount;
+}

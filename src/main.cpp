@@ -8,27 +8,28 @@
 #include "../include/WeaponsList.h"
 using namespace std;
 
-Champion *createEnemy()
+Champion *createEnemy(int stage)
 {
+    float scale = 1.0f + stage * 0.05f; // 5% boost per stage
     int r = rand() % 3;
     Champion *enemy = nullptr;
     switch (r)
     {
     case 0:
         cout << "An enemy Warrior appears: Dreadblade!\n";
-        enemy = new Warrior("Dreadblade");
+        enemy = new Warrior("Dreadblade", scale);
         break;
     case 1:
         cout << "An enemy Mage appears: Maltheron!\n";
-        enemy = new Mage("Maltheron");
+        enemy = new Mage("Maltheron", scale);
         break;
     case 2:
         cout << "An enemy Tank appears: Gor'Mar!\n";
-        enemy = new Tank("Gor'Mar");
+        enemy = new Tank("Gor'Mar", scale);
         break;
     default:
         cout << "An unknown enemy appears: Nameless Horror!\n";
-        enemy = new Warrior("Nameless Horror");
+        enemy = new Warrior("Nameless Horror", scale);
         break;
     }
     return enemy;
@@ -98,21 +99,21 @@ Champion *setupPlayer()
     switch (choice)
     {
     case 1:
-        return new Warrior(player_name);
+        return new Warrior(player_name, 1.0);
     case 2:
-        return new Mage(player_name);
+        return new Mage(player_name, 1.0);
     case 3:
-        return new Tank(player_name);
+        return new Tank(player_name, 1.0);
     default:
         cout << "Invalid choice! Defaulting to Warrior.\n";
-        return new Warrior(player_name);
+        return new Warrior(player_name, 1.0);
     }
 }
 bool playBattle(Champion *player, int &enemiesDefeated)
 {
     system("cls");
     cout << "\n💥 Battle Start! 💥\n";
-    Champion *enemy = createEnemy();
+    Champion *enemy = createEnemy(enemiesDefeated);
 
     while (player->isAlive() && enemy->isAlive())
     {
@@ -238,8 +239,9 @@ void showShop(Champion *player, int &coins)
         cout << "\nOptions:\n";
         cout << "1. Upgrade current weapon's ATK (+2) – 75 coins\n";
         cout << "2. Upgrade current weapon's SP (+4) – 90 coins\n";
-        cout << "3. Buy 'Rage Blade' (10 ATK, 4 SP, 25% crit) – 150 coins\n";
-        cout << "4. Leave Shop\n> ";
+        cout << "3. Buy 'Rage Blade' (10 ATK, 4 SP, 25% crit) – 800 coins\n";
+        cout << "4. Increase Max HP by 20 – 500 coins\n";
+        cout << "5. Leave Shop\n> ";
 
         if (!(cin >> choice))
         {
@@ -251,16 +253,18 @@ void showShop(Champion *player, int &coins)
             continue;
         }
 
+        int price;
         switch (choice)
         {
         case 1:
-            if (coins < 75)
+            price = 75;
+            if (coins < price)
             {
                 cout << "❌ Not enough coins to upgrade ATK.\n";
             }
             else
             {
-                coins -= 75;
+                coins -= price;
                 currentWeapon->boostatk(2);
                 cout << "✅ Weapon upgraded! 🔼 +2 ATK\n";
                 Sleep(2000);
@@ -269,13 +273,14 @@ void showShop(Champion *player, int &coins)
             break;
 
         case 2:
-            if (coins < 90)
+            price = 90;
+            if (coins < price)
             {
                 cout << "❌ Not enough coins to upgrade SP.\n";
             }
             else
             {
-                coins -= 90;
+                coins -= price;
                 currentWeapon->boostsp(4);
                 cout << "✅ Weapon upgraded! ✨ +4 SP\n";
                 Sleep(2000);
@@ -284,13 +289,14 @@ void showShop(Champion *player, int &coins)
             break;
 
         case 3:
-            if (coins < 150)
+            price = 800;
+            if (coins < price)
             {
                 cout << "❌ Not enough coins for Rage Blade.\n";
             }
             else
             {
-                coins -= 150;
+                coins -= price;
                 Weapon *newWep = &Weapons::rageblade;
                 player->equipWeapon(newWep);
                 cout << "🗡️ You now wield the legendary Rage Blade!\n";
@@ -300,6 +306,21 @@ void showShop(Champion *player, int &coins)
             break;
 
         case 4:
+            price = 500;
+            if (coins < price)
+            {
+                cout << "❌ Not enough coins to upgrade Max HP.\n";
+            }
+            else
+            {
+                coins -= price;
+                player->increaseMaxHP(20); // New method in Champion class
+                cout << "❤️ Max HP increased by 20!\n";
+                Sleep(2000);
+                return;
+            }
+            break;
+        case 5:
             cout << "Leaving shop...\n";
             Sleep(1500);
             return; // Exit shop

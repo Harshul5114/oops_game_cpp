@@ -44,6 +44,7 @@ public:
     int getEffectiveAttack() const;
     int getEffectiveSpAttack() const;
     Weapon* getWeapon() const;
+    void increaseMaxHP(int amount);
 
     int getHP() const;
     string getName() const;

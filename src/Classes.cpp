@@ -8,7 +8,7 @@ using namespace std;
 #define RESET "\033[0m"
 
 // ----- Warrior -----
-Warrior::Warrior(string name) : Champion(name, 120, 20, 40, 4, "Power Slash", &Weapons::rustySword) {}
+Warrior::Warrior(string name, float scale) : Champion(name, int(120 * scale), int(20 * scale), int(40 * scale), 4, "Power Slash", &Weapons::rustySword) {}
 
 void Warrior::specialMove(Champion &enemy)
 {
@@ -25,10 +25,16 @@ void Warrior::specialMove(Champion &enemy)
 }
 
 // ----- Mage -----
-Mage::Mage(string name) : Champion(name, 80, 30, 50, 5, "Fireball", &Weapons::apprenticeStaff) {}
-
-
-
+Mage::Mage(string name, float scale)
+    : Champion(
+        name,
+        int(80 * scale),     // HP
+        int(30 * scale),     // ATK
+        int(60 * scale),     // SP ATK
+        5,                   // reqCharge
+        "Fireball",          // special move name
+        &Weapons::apprenticeStaff // starter weapon
+    ) {}
 void Mage::specialMove(Champion &enemy)
 {
     if (spCharge < reqCharge)
@@ -55,7 +61,16 @@ void Mage::specialMove(Champion &enemy)
 }
 
 // ----- Tank -----
-Tank::Tank(string name) : Champion(name, 150, 15, 30, 3, "Shield Bash", &Weapons::woodenShield) {}
+Tank::Tank(string name, float scale)
+    : Champion(
+        name,
+        int(150 * scale),     // HP
+        int(15 * scale),      // ATK
+        int(25 * scale),      // SP ATK
+        3,
+        "Shield Bash",
+        &Weapons::woodenShield
+    ) {}
 
 void Tank::specialMove(Champion &enemy)
 {
